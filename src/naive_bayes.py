@@ -2,15 +2,18 @@
 """Naive Bayes Classifier
 
 Usage:
-    main.py    TRAIN TEST [--ipython | -h]
+    main.py    TRAIN TEST LABELS MAP [--ipython | -h]
 
 Arguments:
     train        the training data
     test         the testing data
+    labels       the data's labels
+    map          map of the data
 
 Options:
     -h, --help     Show this screen.
-    --ipython      using ipython notebook and we want to print figures; not save them
+    --ipython      using ipython notebook and we to forgo saving figs
+    --vocab        vocabulary file
 """
 from docopt import docopt
 
@@ -21,8 +24,7 @@ import csv
 
 # graph tool
 try:
-    import numpy as nx
-    import matplotlib.pyplot as plt
+    import numpy as np
 except ImportError:
     raise ImportError("This program requires Numpy and Matplotlib")
 
@@ -34,7 +36,7 @@ __maintainer__ = "Aaron Gonzales"
 __email__ = "agonzales@cs.unm.edu"
 
 
-def read_file(filename, delim = ' '):
+def read_file(filename, delim=' '):
     """ Reads a file with DNA promoter data
             and fills a list with that data.
             Args:
@@ -58,7 +60,5 @@ def main(_args):
     train_data = read_file(_args['TRAIN'])
 
 
-
 if __name__ == "__main__":
     main(docopt(__doc__))
-
