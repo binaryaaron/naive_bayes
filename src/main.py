@@ -2,11 +2,12 @@
 """Naive Bayes Classifier
 
 Usage:
-    main.py    TRAIN TEST [--ipython | -h]
+    main.py    TRAIN TEST VOCAB [--ipython | -h]
 
 Arguments:
-    train        the training data
-    test         the testing data
+    train        the training data prefix
+    test         the testing data prefix
+    vocab        the vocabulary file
 
 Options:
     -h, --help     Show this screen.
@@ -22,7 +23,6 @@ import csv
 # graph tool
 try:
     import numpy as nx
-    import matplotlib.pyplot as plt
 except ImportError:
     raise ImportError("This program requires Numpy and Matplotlib")
 
@@ -34,12 +34,11 @@ __maintainer__ = "Aaron Gonzales"
 __email__ = "agonzales@cs.unm.edu"
 
 
-def read_file(filename, delim = ' '):
-    """ Reads a file with DNA promoter data
-            and fills a list with that data.
-            Args:
-                filename (str) : path to the file you want to open
-                delim (str): a delimiter for the file
+def read_file(filename, delim=' '):
+    """ Reads a file and fills a list with that data.
+        Args:
+            filename (str) : path to the file you want to open
+            delim (str): a delimiter for the file
     """
     data_list = []
     with open(filename, newline='') as csvfile:
@@ -52,10 +51,12 @@ def read_file(filename, delim = ' '):
 def main(_args):
     """ Drives the program."""
     if _args["--ipython"]:
-        print "Ipython session selected; no saving of figures will happen"
+        print("Ipython session selected; no saving of figures will happen")
     print("--------Training File: {computer}".format(computer=_args["TRAIN"]))
     print("--------Testing File: {computer}".format(computer=_args["TEST"]))
-    train_data = read_file(_args['TRAIN'])
+
+    train_data = read_file(_args['TRAIN'] + '.data')
+    vocab_file = _args['VOCAB']
 
 
 
