@@ -8,10 +8,10 @@ Arguments:
     train        the training data prefix
     test         the testing data prefix
     vocab        the vocabulary file
-
 Options:
     -h, --help     Show this screen.
-    --ipython      using ipython notebook and we want to print figures; not save them
+    --ipython      using ipython notebook and we to forgo saving figs
+    --vocab        vocabulary file
 """
 from docopt import docopt
 
@@ -22,7 +22,7 @@ import csv
 
 # graph tool
 try:
-    import numpy as nx
+    import numpy as np
 except ImportError:
     raise ImportError("This program requires Numpy and Matplotlib")
 
@@ -59,7 +59,5 @@ def main(_args):
     vocab_file = _args['VOCAB']
 
 
-
 if __name__ == "__main__":
     main(docopt(__doc__))
-
