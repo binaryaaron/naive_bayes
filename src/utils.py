@@ -15,8 +15,8 @@ __email__ = "agonzales@cs.unm.edu"
 
 
 def read_file_dict(filename):
-    """ Reads a one-column file and fills a dict with that data. Mostly for the vocabulary
-        file and label file. Much faster than the iterable style
+    """ Reads a one-column file and fills a dict with that data. Mostly for the
+        vocabulary file and label file. Much faster than the iterable style
         Args:
             filename (str) : path to the file you want to open
         Returns:
@@ -25,7 +25,7 @@ def read_file_dict(filename):
     with open(filename) as csvfile:
         reader = csv.reader(csvfile)
         # dict comprehension over lines in file. Enumerate gives explicit i
-        mydict = {i+1:line for i,line in enumerate(reader)}
+        mydict = {i+1: line for i, line in enumerate(reader)}
     return mydict
 
 
@@ -50,9 +50,10 @@ def get_words_from_doc(docid, model, vocab):
         List of words from that document.
     """
     # subsets the bow model into just the doc we want
-    doc = model[model[:,0] == docid]
+    doc = model[model[:, 0] == docid]
     words = [vocab[doc[i][1]][0] for i in range(0, doc.shape[0])]
     return words
+
 
 def get_class_from_bow(class_label, bow):
     """ Helper function to get the words represented from a document's bag of
@@ -65,7 +66,7 @@ def get_class_from_bow(class_label, bow):
         view of matrix that we want.
     """
     # subsets the bow model into just the doc we want
-    doc = bow[bow[:,3] == class_label]
+    doc = bow[bow[:, 3] == class_label]
     return doc
 
 
@@ -112,9 +113,19 @@ def read_mapfile(filename):
     """
     with open('../data/train.map') as mapfile:
         reader = csv.reader(mapfile, delimiter=' ')
-        #for line in reader:
-         #   print(line)
-        label_map = {int(line[1]):line[0] for line in reader}
+        label_map = {int(line[1]): line[0] for line in reader}
     return label_map
 
 
+def estimate_priors(label_map, label_vec, num_classes=20):
+    """populates a dictionary with the prior probabilities of each class
+    Args:
+        label_map (dict): class labels
+        label_vec (np.array): vector of ids
+    Returns: dictionary of prior probs for each class
+    """
+    priors = {}
+    for i in range(1, num_classes+1):
+        view = label_vec[label_vec == i]
+        priors[label_map[i]] = view.size/label_vec.size
+    return priors
