@@ -130,25 +130,6 @@ def estimate_priors(label_map, label_vec, num_classes=20):
         priors[label_map[i]] = view.size/label_vec.size
     return priors
 
-def sumwords(data, vocab):
-    """Calculates the number of words for each class in the dataset."""
-
-    countsum_words = []
-    #TODO change range
-    num_words = len(vocab.items())
-    for i in range(1,21):
-        count = train_data[train_data[:, 1] == i]
-        # print(count)
-        count_tmp = []
-        for i in range(1, 21):
-            # return view over single classes
-            class_view = count[count[:, 3] == i]
-            # gets scalar sum for the counts in the view
-            # and returns just that scalar value; Numpy returns an array
-            class_sum = class_view.sum(axis=0)[2]
-            count_tmp.append(class_sum)
-        countsum_words.append(count_tmp)
-
 
 def print_word_and_count(wordid, vocab, class_map, countsum_words):
     """Utility function to print the number of words in a class
@@ -163,3 +144,32 @@ def print_word_and_count(wordid, vocab, class_map, countsum_words):
         print(class_map[i] + ': ' + str(countsum_words[wordid][i]))
 
 
+def phat_word_est(train_data, laplacian=False):
+    """Gets P(c|w) for all words in the dictionary.
+    Args:
+        train_data (numpy.array): training set
+        laplacian (bool): denote if laplacian is wanted or not
+    Returns: numpy array (float16) of all words and estimates
+    """
+    word_tots = []
+    countsum_words = []
+    # testing on small set
+    # TODO change this
+    for i in range(1, 10000):
+        count = train_data[train_data[:, 1] == i]
+        tot_word = count.sum(axis=0)[2]
+        word_tots.append(tot_word)
+        # print(count)
+        count_tmp = []
+        for i in range(1, 21):
+            # return view over single classes
+            class_view = count[count[:, 3] == i]
+            # gets scalar sum for the counts in the view
+            # and returns just that scalar value; Numpy returns an array
+            class_sum = class_view.sum(axis=0)[2]
+            count_tmp.append(class_sum/tot_word)
+        countsum_words.append(count_tmp)
+    phat_words = np.array(countsum_words, dtype='float16')
+    countsum_words = []
+    word_tots = []
+    return phat_words
