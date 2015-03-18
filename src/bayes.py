@@ -1,14 +1,17 @@
 """
-bayes.py handles implementation of the meaty parts of the classifier
+bayes.py handles implementation of the meaty parts of the classifier -
+estimation of priors and predicting new data.
 """
 try:
     import numpy as np
+    import bayes
+    import utils
     from nltk import word_tokenize
     from nltk.stem import WordNetLemmatizer
     from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.datasets import fetch_20newsgroups
 except ImportError:
     raise ImportError("This program requires Numpy and scikit-learn")
-
 
 
 __author__ = "Aaron Gonzales"
@@ -18,12 +21,16 @@ __email__ = "agonzales@cs.unm.edu"
 
 
 class LemmaTokenizer(object):
+    """
+    LemmaTokenizer is an optional tokenizer for the CountVectorizer. it
+    provides stemming of words.
+    This example is taken verbatim from Scikit-Learn's implementation.
+    """
     def __init__(self):
         self.wnl = WordNetLemmatizer()
+
     def __call__(self, doc):
         return [self.wnl.lemmatize(t) for t in word_tokenize(doc)]
-
-
 
 
 def phat_class_est(class_list, class_labels, debug=False):
@@ -31,7 +38,7 @@ def phat_class_est(class_list, class_labels, debug=False):
     Args:
         class_list (np.array): the long list of classes for each document in
     the dataset
-        class_labels(Np.array): list of class label names
+        class_labels(np.array): list of class label names
     Returns:
         np.array of prior counts for all
     """
@@ -46,18 +53,18 @@ def phat_class_est(class_list, class_labels, debug=False):
     return class_priors
 
 
-def phat_word_est(bow_train, class_labels, nclasses=20, alpha=None, debug=None):
+def phat_word_est(train_data, labels, nclasses=20, alpha=None, debug=None):
     """Gets P(c|w) for all words in the dictionary.
     Args:
-        bow_train (scipy.sparse): training set, assumes bag of words
-        class_labels(np.array): list of class label names (scikitlearn
+        train_data (scipy.sparse): training set, assumes bag of words
+        labels(np.array): list of class label names (scikitlearn
             data.target_names) class_names(list): array of class labels for
             each document
         laplacian (bool): denote if laplacian is wanted or not
         nclasses (int): number of classes in the set
     Returns: tuple with (numpy array of summed words, numpy array of priors)
     """
-    vocab_n = bow_train.shape[0]
+    vocab_n = train_data.shape[0]
     if alpha is not None:
         # this is done for easy of the for loop's calculation.
         _alpha = alpha+1
@@ -77,15 +84,15 @@ def phat_word_est(bow_train, class_labels, nclasses=20, alpha=None, debug=None):
         print('\t denominator = %f' % denominator_p)
 
     # gives the total number of words for a column vector in bow model
-    word_sums = bow_train.sum(axis=0)
+    word_sums = train_data.sum(axis=0)
     # preallocate array, 20 row, word dic length
-    phat_words = np.zeros((nclasses, bow_train.shape[1]), dtype='float64')
+    phat_words = np.zeros((nclasses, train_data.shape[1]), dtype='float64')
 
     # create sum vectors and assign them to the correct spot
     # may need to fiddle with smoothing params
     for i in range(nclasses):
-        c_mask = class_labels == i
-        c_sum = bow_train[c_mask].sum(axis=0)
+        c_mask = labels == i
+        c_sum = train_data[c_mask].sum(axis=0)
         c_sum = c_sum + (_alpha - 1)
         # print(c_sum/word_sums)
         phat_words[i] = (c_sum / (word_sums + denominator_p))
@@ -94,7 +101,7 @@ def phat_word_est(bow_train, class_labels, nclasses=20, alpha=None, debug=None):
 
 
 def predict(test_data, test_labels, p_classes, p_features, classes=20,
-        debug=False):
+            debug=False):
     """Function to predict the class of a dataset.
     Args:
         test_data (scipy.sparse): This project assumes a bow model in a sparse
@@ -118,7 +125,7 @@ def predict(test_data, test_labels, p_classes, p_features, classes=20,
     # this gives us a (n_test_data, n_classes) matrix
     # corresponding to a document per column with a row of probabilities for
     # belonging to a class.
-    #pred_log_probs = test_data.dot(sums)
+    # pred_log_probs = test_data.dot(sums)
     pred_log_probs = log_p_classes + (test_data * log_p_features.T)
 
     # gives vector of class labels for all test vectors
@@ -142,35 +149,65 @@ def vectorize(train_data, test_data, minfreq=10, maxfreq=0.90, stemmer=False):
     cv_train = CountVectorizer(stop_words='english',
                                max_df=maxfreq,
                                min_df=minfreq,
-                               #analyzer='char_wb',
-                               #ngram_range=(2,2)
-                               #min_df=1,
-                               #strip_accents='unicode'
-                               #token_pattern=r"\b[a-z0-9_\-\.]+[a-z][a-z0-9_\-\.]+\b",
-                               #tokenizer=LemmaTokenizer()
+                               # analyzer='char_wb',
+                               # ngram_range=(2,2)
+                               # min_df=1,
+                               # strip_accents='unicode'
+                               # token_pattern=r"\b[a-z0-9_\-\.]+[a-z][a-z0-9_\-\.]+\b",
+                               # tokenizer=LemmaTokenizer()
                                )
+    print('fitting training data bag-of-words model')
     train_ = cv_train.fit_transform(train_data)
+    print('fitting test data bag-of-words model')
     test_ = cv_train.transform(test_data)
     return(train_, test_)
 
 
 def run_model(train_data, test_data):
+    """Runs the full training and testing steps
+    Args:
+        train_data(sklearn.datasets.base.Bunch): the training data from scikit
+        test_data(sklearn.datasets.base.Bunch): the testing data from scikit
+    Returns:
+        tuple with all estimated things - (class_priors, estimated_words,
+        predicted values, reportstring)
+    """
 
+    print("fitting count vectorizers")
+    train_bow, test_bow = vectorize(train_data.data, test_data.data)
 
-    class_priors = bayes.phat_class_est(train_data.target,
-                                        train_data.target_names,
-                                        debug=False)
+    print("estimating class priors")
+    class_priors = phat_class_est(train_data.target,
+                                  train_data.target_names,
+                                  debug=False)
 
-    phat_words = bayes.phat_word_est(bow_train,
-                                     class_labels=train_data.target
-                                     #alpha=1
-                                     )
+    print("estimating word priors")
+    phat_words = phat_word_est(train_bow,
+                               labels=train_data.target
+                              )
 
-    predicted = bayes.predict(test_data=bow_test,
-                  test_labels=twenty_test.target,
-                  p_classes=class_priors,
-                  p_features=phat_words
-                  )
+    print("predicting")
+    predicted = predict(test_data=test_bow,
+                              test_labels=test_data.target,
+                              p_classes=class_priors,
+                              p_features=phat_words
+                              )
 
+    np.set_printoptions(precision=4)
+    rep = utils.report(predicted, train_data.target_names, print_report=True,
+                       print_matrix = True)
+    return (class_priors, phat_words, predicted, rep)
 
+def main():
+    print('loading training set')
+    twenty_train = fetch_20newsgroups(subset='train',
+                                      #remove=('headers'),
+                                      shuffle=False)
+    print('loading testing set')
+    twenty_test = fetch_20newsgroups(subset='test',
+                                      # remove=('headers'),
+                                      shuffle=False)
+    cpriors, map_, predicted ,report = run_model(twenty_train, twenty_test)
 
+if __name__ == "__main__":
+    main()
