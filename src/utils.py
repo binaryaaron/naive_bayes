@@ -153,21 +153,42 @@ def calc_gen_accuracy(predicted):
     return:
         tuple
     """
-    num_right = np.sum(predicted[:,2])
+    num_right = np.sum(predicted[:, 2])
     num_wrong = predicted.shape[0] - num_right
     general_acc = num_right/predicted.shape[0]
     return(num_right, num_wrong, general_acc)
-    
 
-def report(predicted, labels):
+
+def report(predicted, labels, print_report=False, print_cm=True, print_matrix=True):
     """Light wrapper around sklearn metrics"""
-    cr = metrics.classification_report(predicted[:,0], predicted[:,1], 
-            target_names=labels)
-    # print(metrics.confusion_matrix(predicted[:,0], predicted[:,1]))
-    print(cr)
+    cr = metrics.classification_report(predicted[:, 0],
+                                       predicted[:, 1], 
+                                       target_names=labels)
+    if print_report is True:
+        print(cr)
+
+    if print_cm is True:
+        # Compute confusion matrix
+        conf_matrix = metrics.confusion_matrix(predicted[:, 0], predicted[:, 1])
+
+        # Normalize the confusion matrix by row (i.e by the number of samples
+        # in each class)
+        cm_normalized = conf_matrix.astype('float') / \
+                        conf_matrix.sum(axis=1)[:, np.newaxis]
+        # print('Normalized confusion matrix')
+        plt.figure()
+        plot_confusion_matrix(cm_normalized,
+                              labels,
+                              title='Normalized confusion matrix'
+                              )
+
+        plt.savefig('nb_confusion_matrix.pdf')
+        plt.show()
     return cr
 
-def plot_confusion_matrix(cm, labels, title='Confusion matrix', cmap=plt.cm.Blues):
+
+def plot_confusion_matrix(cm, labels, title='Confusion matrix',
+                          cmap=plt.cm.Blues):
     """Example taken straight from scikit
     http://scikit-learn.org/dev/auto_examples/model_selection/plot_confusion_matrix.html
     """
@@ -177,7 +198,5 @@ def plot_confusion_matrix(cm, labels, title='Confusion matrix', cmap=plt.cm.Blue
     tick_marks = np.arange(len(labels))
     plt.xticks(tick_marks, labels, rotation=90)
     plt.yticks(tick_marks, labels)
-    plt.tight_layout()
-    
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
