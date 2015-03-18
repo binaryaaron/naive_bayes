@@ -25,9 +25,24 @@ def estimate(a, x, xga):
     agx = -1.0
 
 
-def calc_priors(train_data):
-    """calculates the priors of a class"""
-    w_given_class = phat_word_est(train_data)
+def phat_class_est(class_list, class_labels, debug=False):
+    """calculates the priors of a class using MLE
+    Args:
+        class_list (np.array): the long list of classes for each document in
+    the dataset
+        class_labels(Np.array): list of class label names
+    Returns:
+        np.array of prior counts for all 
+    """
+    if debug:
+        print('Estimating prior class probabilities')
+    class_priors = np.zeros(shape=(len(class_labels)), dtype='float64')
+    for i, lab in enumerate(class_labels):
+        view = class_list[class_list == i]
+        class_priors[i] = view.size/class_list.size
+        if debug:
+            print(lab + ': ' + str(class_priors[i]))
+    return class_priors
 
 
 def phat_word_est(bow_train, class_labels, nclasses=20, alpha=None):
