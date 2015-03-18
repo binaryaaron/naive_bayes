@@ -12,19 +12,6 @@ __license__ = "MIT"
 __email__ = "agonzales@cs.unm.edu"
 
 
-def estimate(a, x, xga):
-    """ uses bayes's theorem to estimate a posterior probability
-    Args:
-        a (float) : probability of a
-        x (float) : probability of b
-        xga : probabilty of x|a ("x given a")
-        Returns:
-            float: probability of a | x ("a given x")
-    """
-    # testing with a neg num
-    agx = -1.0
-
-
 def phat_class_est(class_list, class_labels, debug=False):
     """calculates the priors of a class using MLE
     Args:
@@ -32,7 +19,7 @@ def phat_class_est(class_list, class_labels, debug=False):
     the dataset
         class_labels(Np.array): list of class label names
     Returns:
-        np.array of prior counts for all 
+        np.array of prior counts for all
     """
     if debug:
         print('Estimating prior class probabilities')
@@ -49,8 +36,9 @@ def phat_word_est(bow_train, class_labels, nclasses=20, alpha=None):
     """Gets P(c|w) for all words in the dictionary.
     Args:
         bow_train (scipy.sparse): training set, assumes bag of words
-        class_labels(np.array): list of class label names (scikitlearn data.target_names)
-        class_names(list): array of class labels for each document
+        class_labels(np.array): list of class label names (scikitlearn
+            data.target_names) class_names(list): array of class labels for
+            each document
         laplacian (bool): denote if laplacian is wanted or not
         nclasses (int): number of classes in the set
     Returns: tuple with (numpy array of summed words, numpy array of priors)
@@ -89,3 +77,46 @@ def phat_word_est(bow_train, class_labels, nclasses=20, alpha=None):
         phat_words[i] = (c_sum / (word_sums + denominator_p))
     # return (word_sums, phat_words)
     return phat_words
+
+
+def predict(test_data, test_labels, p_classes, p_features, classes=20,
+        debug=False):
+    """Function to predict the class of a dataset.
+    Args:
+        test_data (scipy.sparse): This project assumes a bow model in a sparse
+            matrix
+        test_labels (numpy.array): label vector
+        p_classes (numpy.array): 1-dim array of class priors.
+        p_features (numpy.array): 2-d array of estimated feature probabilities.
+            expected size is (classes, features)
+        classes (int): number of classes
+    Return:
+        2-d numpy array with document ID, true label, and predicted label as
+        columns. shape should be (number_test_documents, 3)
+    """
+    log_p_classes = np.log2(p_classes)
+    log_p_features = np.log2(p_features)
+
+    # adds log probs for each feature vector
+    print('log-prob array shape: ')
+    print(log_p_features.T.shape)
+
+    # this gives us a (n_test_data, n_classes) matrix
+    # corresponding to a document per column with a row of probabilities for
+    # belonging to a class.
+    #pred_log_probs = test_data.dot(sums)
+    pred_log_probs = log_p_classes + (test_data * log_p_features.T)
+
+    # gives vector of class labels for all test vectors
+    # axis = 1 gives the argmax along each row
+    # and conveniently gives a vector
+    pred_labels = np.argmax(pred_log_probs, axis=1)
+    acc = pred_labels == test_labels
+
+    # returns (n 3) array
+    return np.array([test_labels, pred_labels, acc]).T
+
+
+
+
+
