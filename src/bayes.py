@@ -9,6 +9,7 @@ try:
     from nltk import word_tokenize
     from nltk.stem import WordNetLemmatizer
     from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.feature_extraction.text import TfidfVectorizer
     from sklearn.datasets import fetch_20newsgroups
 except ImportError:
     raise ImportError("This program requires Numpy and scikit-learn")
@@ -138,7 +139,8 @@ def predict(test_data, test_labels, p_classes, p_features, classes=20,
     return np.array([test_labels, pred_labels, acc]).T
 
 
-def vectorize(train_data, test_data, minfreq=10, maxfreq=0.90, stemmer=False):
+def vectorize(train_data, test_data, minfreq=5, maxfreq=0.90, stemmer=False,
+              model='bow'):
     """Uses scikit-learn's tools to produce a bag of words model over the data.
     Args:
         train_data (list): list of documents in the training set
@@ -146,19 +148,25 @@ def vectorize(train_data, test_data, minfreq=10, maxfreq=0.90, stemmer=False):
     Return:
         tuple of two fitted bag-of-words models.
     """
-    cv_train = CountVectorizer(stop_words='english',
-                               max_df=maxfreq,
-                               min_df=minfreq,
-                               # analyzer='char_wb',
-                               # ngram_range=(2,2)
-                               # min_df=1,
-                               # strip_accents='unicode'
-                               # token_pattern=r"\b[a-z0-9_\-\.]+[a-z][a-z0-9_\-\.]+\b",
-                               # tokenizer=LemmaTokenizer()
-                               )
-    print('fitting training data bag-of-words model')
+    if model == 'bow':
+        cv_train = CountVectorizer(stop_words='english',
+                                   max_df=maxfreq,
+                                   min_df=minfreq
+                                   # analyzer='char_wb',
+                                   # ngram_range=(2,2)
+                                   # strip_accents='unicode'
+                                   # token_pattern=r"\b[a-z0-9_\-\.]+[a-z][a-z0-9_\-\.]+\b",
+                                   # tokenizer=LemmaTokenizer()
+                                   )
+    elif model == 'tfidf':
+        cv_train = TfidfVectorizer(stop_words='english',
+                                   max_df=maxfreq,
+                                   min_df=5
+                                   #sublinear_tf=True
+                                   )
+    print('fitting training ' + model + ' vector model')
     train_ = cv_train.fit_transform(train_data)
-    print('fitting test data bag-of-words model')
+    print('fitting test ' + model + ' vector model')
     test_ = cv_train.transform(test_data)
     return(train_, test_)
 
@@ -198,15 +206,28 @@ def run_model(train_data, test_data):
                        print_matrix = True)
     return (class_priors, phat_words, predicted, rep)
 
-def main():
+
+def get_newsgroups(remove=[]):
+    """Convenience function to get the newgroups dataset.
+    Args:
+        remove (list): items to filter from the data, headers, quotes, or
+        footers. defaults to nothing 
+    Returns:
+        tuple of both scikit training / testing sets.
+    """
     print('loading training set')
     twenty_train = fetch_20newsgroups(subset='train',
-                                      #remove=('headers'),
+                                      remove=remove,
                                       shuffle=False)
     print('loading testing set')
     twenty_test = fetch_20newsgroups(subset='test',
-                                      # remove=('headers'),
+                                      remove=remove,
                                       shuffle=False)
+    return (twenty_train, twenty_test)
+
+
+def main():
+    twenty_train, twenty_test = get_newsgroups()
     cpriors, map_, predicted ,report = run_model(twenty_train, twenty_test)
 
 if __name__ == "__main__":
