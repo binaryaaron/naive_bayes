@@ -4,7 +4,8 @@ utils.py is file for helper methods
 import csv
 try:
     import numpy as np
-    import matplotlib as mpl
+    import matplotlib.pyplot as plt
+    from sklearn import metrics
 except ImportError:
     raise ImportError("This program requires Numpy and Matplotlib")
 
@@ -144,3 +145,39 @@ def print_word_and_count(wordid, vocab, class_map, countsum_words):
         print(class_map[i] + ': ' + str(countsum_words[wordid][i]))
 
 
+def calc_gen_accuracy(predicted):
+    """Reports the general accuracy of a predicted set of data
+    Args:
+        predicted (np.array): shape of features, 3 with labels, true,
+                                predicted, and match
+    return:
+        tuple
+    """
+    num_right = np.sum(predicted[:,2])
+    num_wrong = predicted.shape[0] - num_right
+    general_acc = num_right/predicted.shape[0]
+    return(num_right, num_wrong, general_acc)
+    
+
+def report(predicted, labels):
+    """Light wrapper around sklearn metrics"""
+    cr = metrics.classification_report(predicted[:,0], predicted[:,1], 
+            target_names=labels)
+    # print(metrics.confusion_matrix(predicted[:,0], predicted[:,1]))
+    print(cr)
+    return cr
+
+def plot_confusion_matrix(cm, labels, title='Confusion matrix', cmap=plt.cm.Blues):
+    """Example taken straight from scikit
+    http://scikit-learn.org/dev/auto_examples/model_selection/plot_confusion_matrix.html
+    """
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(labels))
+    plt.xticks(tick_marks, labels, rotation=90)
+    plt.yticks(tick_marks, labels)
+    plt.tight_layout()
+    
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
