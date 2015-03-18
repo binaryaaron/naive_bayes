@@ -3,13 +3,27 @@ bayes.py handles implementation of the meaty parts of the classifier
 """
 try:
     import numpy as np
+    from nltk import word_tokenize
+    from nltk.stem import WordNetLemmatizer
+    from sklearn.feature_extraction.text import CountVectorizer
 except ImportError:
-    raise ImportError("This program requires Numpy")
+    raise ImportError("This program requires Numpy and scikit-learn")
+
+
 
 __author__ = "Aaron Gonzales"
 __copyright__ = "MIT"
 __license__ = "MIT"
 __email__ = "agonzales@cs.unm.edu"
+
+
+class LemmaTokenizer(object):
+    def __init__(self):
+        self.wnl = WordNetLemmatizer()
+    def __call__(self, doc):
+        return [self.wnl.lemmatize(t) for t in word_tokenize(doc)]
+
+
 
 
 def phat_class_est(class_list, class_labels, debug=False):
@@ -32,7 +46,7 @@ def phat_class_est(class_list, class_labels, debug=False):
     return class_priors
 
 
-def phat_word_est(bow_train, class_labels, nclasses=20, alpha=None):
+def phat_word_est(bow_train, class_labels, nclasses=20, alpha=None, debug=None):
     """Gets P(c|w) for all words in the dictionary.
     Args:
         bow_train (scipy.sparse): training set, assumes bag of words
@@ -117,6 +131,46 @@ def predict(test_data, test_labels, p_classes, p_features, classes=20,
     return np.array([test_labels, pred_labels, acc]).T
 
 
+def vectorize(train_data, test_data, minfreq=10, maxfreq=0.90, stemmer=False):
+    """Uses scikit-learn's tools to produce a bag of words model over the data.
+    Args:
+        train_data (list): list of documents in the training set
+        test_data (list): list of documents in the test set
+    Return:
+        tuple of two fitted bag-of-words models.
+    """
+    cv_train = CountVectorizer(stop_words='english',
+                               max_df=maxfreq,
+                               min_df=minfreq,
+                               #analyzer='char_wb',
+                               #ngram_range=(2,2)
+                               #min_df=1,
+                               #strip_accents='unicode'
+                               #token_pattern=r"\b[a-z0-9_\-\.]+[a-z][a-z0-9_\-\.]+\b",
+                               #tokenizer=LemmaTokenizer()
+                               )
+    train_ = cv_train.fit_transform(train_data)
+    test_ = cv_train.transform(test_data)
+    return(train_, test_)
+
+
+def run_model(train_data, test_data):
+
+
+    class_priors = bayes.phat_class_est(train_data.target,
+                                        train_data.target_names,
+                                        debug=False)
+
+    phat_words = bayes.phat_word_est(bow_train,
+                                     class_labels=train_data.target
+                                     #alpha=1
+                                     )
+
+    predicted = bayes.predict(test_data=bow_test,
+                  test_labels=twenty_test.target,
+                  p_classes=class_priors,
+                  p_features=phat_words
+                  )
 
 
 
