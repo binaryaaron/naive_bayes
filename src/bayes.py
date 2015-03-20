@@ -4,7 +4,6 @@ estimation of priors and predicting new data.
 """
 try:
     import numpy as np
-    import bayes
     import utils
     from nltk import word_tokenize
     from nltk.stem import WordNetLemmatizer
@@ -20,6 +19,8 @@ __copyright__ = "MIT"
 __license__ = "MIT"
 __email__ = "agonzales@cs.unm.edu"
 
+train_bow = 0
+test_bow = 0
 
 class LemmaTokenizer(object):
     """
@@ -54,7 +55,8 @@ def phat_class_est(class_list, class_labels, debug=False):
     return class_priors
 
 
-def phat_word_est(train_data, labels, nclasses=20, alpha=None, debug=None):
+def phat_word_est(train_data, labels, beta=None,
+                  nclasses=20, laplacian=(False, None), debug=None):
     """Gets P(c|w) for all words in the dictionary.
     Args:
         train_data (scipy.sparse): training set, assumes bag of words
@@ -66,16 +68,20 @@ def phat_word_est(train_data, labels, nclasses=20, alpha=None, debug=None):
     Returns: tuple with (numpy array of summed words, numpy array of priors)
     """
     vocab_n = train_data.shape[0]
-    if alpha is not None:
+    lap, alpha = laplacian
+    if lap is True:
+        if alpha is None:
+            alpha = 1
         # this is done for easy of the for loop's calculation.
         _alpha = alpha+1
-        denominator_p = alpha*nclasses
+        denominator_p = alpha * nclasses
         print('estimating params with Laplacian Smoothing:')
         print('\t alpha = %d' % alpha)
         print('\t denominator = %d' % denominator_p)
     else:
         # beta is 1/(vocab size)
-        beta = 1/vocab_n
+        if beta is None:
+            beta = 1/vocab_n
         _alpha = 1 + beta
         denominator_p = beta * vocab_n
         print('estimating params with Dirchlet Prior:')
@@ -120,8 +126,8 @@ def predict(test_data, test_labels, p_classes, p_features, classes=20,
     log_p_features = np.log2(p_features)
 
     # adds log probs for each feature vector
-    print('log-prob array shape: ')
-    print(log_p_features.T.shape)
+    # print('log-prob array shape: ')
+    # print(log_p_features.T.shape)
 
     # this gives us a (n_test_data, n_classes) matrix
     # corresponding to a document per column with a row of probabilities for
@@ -162,7 +168,7 @@ def vectorize(train_data, test_data, minfreq=5, maxfreq=0.90, stemmer=False,
         cv_train = TfidfVectorizer(stop_words='english',
                                    max_df=maxfreq,
                                    min_df=5
-                                   #sublinear_tf=True
+                                   # sublinear_tf=True
                                    )
     print('fitting training ' + model + ' vector model')
     train_ = cv_train.fit_transform(train_data)
@@ -171,7 +177,7 @@ def vectorize(train_data, test_data, minfreq=5, maxfreq=0.90, stemmer=False,
     return(train_, test_)
 
 
-def run_model(train_data, test_data):
+def run_model(train_data, test_data, beta=None, bow=False, report=True):
     """Runs the full training and testing steps
     Args:
         train_data(sklearn.datasets.base.Bunch): the training data from scikit
@@ -180,10 +186,18 @@ def run_model(train_data, test_data):
         tuple with all estimated things - (class_priors, estimated_words,
         predicted values, reportstring)
     """
+    if bow is not False:
+        return _run_model(train_data, test_data, beta, bow, report=report)
 
     print("fitting count vectorizers")
-    train_bow, test_bow = vectorize(train_data.data, test_data.data)
+    bow = (train_bow, test_bow) = vectorize(train_data.data, test_data.data)
+    return _run_model(train_data, test_data, beta=beta, bow=bow, report=report)
 
+
+def _run_model(train_data, test_data, beta=None, bow=False, report=True):
+
+    if bow is not False:
+        train_bow, test_bow = bow
     print("estimating class priors")
     class_priors = phat_class_est(train_data.target,
                                   train_data.target_names,
@@ -191,19 +205,27 @@ def run_model(train_data, test_data):
 
     print("estimating word priors")
     phat_words = phat_word_est(train_bow,
+                               beta=beta,
                                labels=train_data.target
-                              )
+                               )
 
     print("predicting")
     predicted = predict(test_data=test_bow,
-                              test_labels=test_data.target,
-                              p_classes=class_priors,
-                              p_features=phat_words
-                              )
+                        test_labels=test_data.target,
+                        p_classes=class_priors,
+                        p_features=phat_words
+                        )
 
     np.set_printoptions(precision=4)
-    rep = utils.report(predicted, train_data.target_names, print_report=True,
-                       print_matrix = True)
+    if report is True:
+        rep = utils.report(predicted, train_data.target_names,
+                           print_report=True,
+                           print_cm=True)
+    else:
+        rep = utils.report(predicted, train_data.target_names,
+                           print_report=False,
+                           print_cm=False)
+
     return (class_priors, phat_words, predicted, rep)
 
 
@@ -211,7 +233,7 @@ def get_newsgroups(remove=[]):
     """Convenience function to get the newgroups dataset.
     Args:
         remove (list): items to filter from the data, headers, quotes, or
-        footers. defaults to nothing 
+        footers. defaults to nothing
     Returns:
         tuple of both scikit training / testing sets.
     """
@@ -221,14 +243,14 @@ def get_newsgroups(remove=[]):
                                       shuffle=False)
     print('loading testing set')
     twenty_test = fetch_20newsgroups(subset='test',
-                                      remove=remove,
-                                      shuffle=False)
+                                     remove=remove,
+                                     shuffle=False)
     return (twenty_train, twenty_test)
 
 
 def main():
     twenty_train, twenty_test = get_newsgroups()
-    cpriors, map_, predicted ,report = run_model(twenty_train, twenty_test)
+    cpriors, map_, predicted, report = run_model(twenty_train, twenty_test)
 
 if __name__ == "__main__":
     main()
