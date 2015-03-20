@@ -61,7 +61,7 @@ def phat_word_est(train_data, labels, beta=None,
         labels(np.array): list of class label names (scikitlearn
             data.target_names) class_names(list): array of class labels for
             each document
-        laplacian (bool): denote if laplacian is wanted or not
+        laplacian : tuple with bool and alpha specifying using it or not
         nclasses (int): number of classes in the set
     Returns: tuple with (numpy array of summed words, numpy array of priors)
     """
@@ -179,7 +179,8 @@ def vectorize(train_data, test_data, minfreq=5, maxfreq=0.90, stemmer=False,
     return(train_, test_, cv_train)
 
 
-def run_model(train_data, test_data, beta=None, bow=False, report=True):
+def run_model(train_data, test_data, beta=None, bow=False, report=True,
+              laplacian=(False, None)):
     """Runs the full training and testing steps
     Args:
         train_data(sklearn.datasets.base.Bunch): the training data from scikit
@@ -192,15 +193,18 @@ def run_model(train_data, test_data, beta=None, bow=False, report=True):
         predicted values, reportstring)
     """
     if bow is not False:
-        return _run_model(train_data, test_data, beta, bow, report=report)
+        return _run_model(train_data, test_data, beta, bow, report=report,
+                          laplacian=laplacian)
 
     print("fitting count vectorizers")
     _bow = (tr_bow, tr_bow, cv) = vectorize(train_data.data, test_data.data)
     bow = (_bow[0], _bow[1])
-    return _run_model(train_data, test_data, beta=beta, bow=bow, report=report)
+    return _run_model(train_data, test_data, beta=beta, bow=bow, report=report,
+                      laplacian=laplacian)
 
 
-def _run_model(train_data, test_data, beta=None, bow=False, report=True):
+def _run_model(train_data, test_data, beta=None, bow=False, report=True,
+               laplacian=(False, None)):
     """helper function for run_model
     Args:
         train_data(sklearn.datasets.base.Bunch): the training data from scikit
@@ -222,6 +226,7 @@ def _run_model(train_data, test_data, beta=None, bow=False, report=True):
 
     print("estimating word priors")
     phat_words = phat_word_est(train_bow,
+                               laplacian=laplacian,
                                beta=beta,
                                labels=train_data.target
                                )
