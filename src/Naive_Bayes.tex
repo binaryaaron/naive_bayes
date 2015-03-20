@@ -1,0 +1,1113 @@
+
+
+
+% Header, overrides base
+
+    % Make sure that the sphinx doc style knows who it inherits from.
+    \def\sphinxdocclass{article}
+
+    % Declare the document class
+    \documentclass[letterpaper,10pt,english]{/usr/local/lib/python3.4/dist-packages/sphinx/texinputs/sphinxhowto}
+
+    % Imports
+    \usepackage[utf8]{inputenc}
+    \DeclareUnicodeCharacter{00A0}{\\nobreakspace}
+    \usepackage[T1]{fontenc}
+    \usepackage{babel}
+    \usepackage{times}
+    \usepackage{import}
+    \usepackage[Bjarne]{/usr/local/lib/python3.4/dist-packages/sphinx/texinputs/fncychap}
+    \usepackage{longtable}
+    \usepackage{/usr/local/lib/python3.4/dist-packages/sphinx/texinputs/sphinx}
+    \usepackage{multirow}
+
+    \usepackage{amsmath}
+    \usepackage{amssymb}
+    \usepackage{ucs}
+    \usepackage{enumerate}
+
+    % Used to make the Input/Output rules follow around the contents.
+    \usepackage{needspace}
+
+    % Pygments requirements
+    \usepackage{fancyvrb}
+    \usepackage{color}
+    % ansi colors additions
+    \definecolor{darkgreen}{rgb}{.12,.54,.11}
+    \definecolor{lightgray}{gray}{.95}
+    \definecolor{brown}{rgb}{0.54,0.27,0.07}
+    \definecolor{purple}{rgb}{0.5,0.0,0.5}
+    \definecolor{darkgray}{gray}{0.25}
+    \definecolor{lightred}{rgb}{1.0,0.39,0.28}
+    \definecolor{lightgreen}{rgb}{0.48,0.99,0.0}
+    \definecolor{lightblue}{rgb}{0.53,0.81,0.92}
+    \definecolor{lightpurple}{rgb}{0.87,0.63,0.87}
+    \definecolor{lightcyan}{rgb}{0.5,1.0,0.83}
+
+    % Needed to box output/input
+    \usepackage{tikz}
+        \usetikzlibrary{calc,arrows,shadows}
+    \usepackage[framemethod=tikz]{mdframed}
+
+    \usepackage{alltt}
+
+    % Used to load and display graphics
+    \usepackage{graphicx}
+    \graphicspath{ {figs/} }
+    \usepackage[Export]{adjustbox} % To resize
+
+    % used so that images for notebooks which have spaces in the name can still be included
+    \usepackage{grffile}
+
+
+    % For formatting output while also word wrapping.
+    \usepackage{listings}
+    \lstset{breaklines=true}
+    \lstset{basicstyle=\small\ttfamily}
+    \def\smaller{\fontsize{9.5pt}{9.5pt}\selectfont}
+
+    %Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    %Set pygments styles if needed...
+    
+        \definecolor{nbframe-border}{rgb}{0.867,0.867,0.867}
+        \definecolor{nbframe-bg}{rgb}{0.969,0.969,0.969}
+        \definecolor{nbframe-in-prompt}{rgb}{0.0,0.0,0.502}
+        \definecolor{nbframe-out-prompt}{rgb}{0.545,0.0,0.0}
+
+        \newenvironment{ColorVerbatim}
+        {\begin{mdframed}[%
+            roundcorner=1.0pt, %
+            backgroundcolor=nbframe-bg, %
+            userdefinedwidth=1\linewidth, %
+            leftmargin=0.1\linewidth, %
+            innerleftmargin=0pt, %
+            innerrightmargin=0pt, %
+            linecolor=nbframe-border, %
+            linewidth=1pt, %
+            usetwoside=false, %
+            everyline=true, %
+            innerlinewidth=3pt, %
+            innerlinecolor=nbframe-bg, %
+            middlelinewidth=1pt, %
+            middlelinecolor=nbframe-bg, %
+            outerlinewidth=0.5pt, %
+            outerlinecolor=nbframe-border, %
+            needspace=0pt
+        ]}
+        {\end{mdframed}}
+        
+        \newenvironment{InvisibleVerbatim}
+        {\begin{mdframed}[leftmargin=0.1\linewidth,innerleftmargin=3pt,innerrightmargin=3pt, userdefinedwidth=1\linewidth, linewidth=0pt, linecolor=white, usetwoside=false]}
+        {\end{mdframed}}
+
+        \renewenvironment{Verbatim}[1][\unskip]
+        {\begin{alltt}\smaller}
+        {\end{alltt}}
+    
+\usepackage{url}
+\usepackage{hyperref}
+\hypersetup{pdfborder = {0 0 0}}
+
+%%% Header and Footer %%% 
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+%%% fancy pages for all non-title and chapter heading pages
+\pagestyle{fancy}
+%%% puts a line in the footer
+\renewcommand{\footrulewidth}{0.4pt}
+%%% adds a reference to the last page to give a running page count
+\fancyfoot[R]{\thepage of \pageref{LastPage}} %requires lastpage
+%%%% adds author name to bottom left
+\fancyfoot[L]{\textit{Aaron Gonzales}}
+%%% empty center footer
+\fancyfoot[C]{}
+
+%%% Adds class name to left header
+\fancyhead[L]{\textit{Machine Learning}}
+%%% Adds document name to right header
+\fancyhead[R]{\textit{Project 2}}
+
+    % Help prevent overflowing lines due to urls and other hard-to-break 
+    % entities.  This doesn't catch everything...
+    \sloppy
+
+    % Document level variables
+    \title{Machine Learning: Naive Bayes}
+    \date{March 20, 2015}
+    \release{}
+    \author{Aaron Gonzales}
+    \renewcommand{\releasename}{}
+
+    % TODO: Add option for the user to specify a logo for his/her export.
+    \newcommand{\sphinxlogo}{}
+
+    % Make the index page of the document.
+    \makeindex
+
+    % Import sphinx document type specifics.
+     
+
+
+% Body
+
+    % Start of the document
+    \begin{document}
+
+        
+            \maketitle
+        
+
+        
+
+
+        
+        
+
+    % Make sure that atleast 4 lines are below the HR
+    \needspace{4\baselineskip}
+
+    
+        \vspace{6pt}
+        \makebox[0.1\linewidth]{\smaller\hfill\tt\color{nbframe-in-prompt}In\hspace{4pt}{[}1{]}:\hspace{4pt}}\\*
+        \vspace{-2.65\baselineskip}
+        \begin{ColorVerbatim}
+            \vspace{-0.7\baselineskip}
+            \begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZpc{}}\PY{k}{load\PYZus{}ext} \PY{n}{autoreload}
+\PY{o}{\PYZpc{}}\PY{k}{autoreload} \PY{l+m+mi}{1}
+\PY{o}{\PYZpc{}}\PY{k}{aimport} \PY{n}{bayes}
+\PY{o}{\PYZpc{}}\PY{k}{aimport} \PY{n}{utils}
+\PY{o}{\PYZpc{}}\PY{k}{pylab} \PY{n}{inline}
+\PY{n}{pylab}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{figure.figsize}\PY{l+s}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{l+m+mf}{12.0}\PY{p}{,} \PY{l+m+mf}{12.0}\PY{p}{)}
+\end{Verbatim}
+
+            
+                \vspace{-0.2\baselineskip}
+            
+        \end{ColorVerbatim}
+    
+
+    
+
+        % If the first block is an image, minipage the image.  Else
+        % request a certain amount of space for the input text.
+        \needspace{4\baselineskip}
+        
+        
+
+            % Add document contents.
+            
+                \begin{InvisibleVerbatim}
+                \vspace{-0.5\baselineskip}
+\begin{alltt}Populating the interactive namespace from numpy and matplotlib
+\end{alltt}
+
+            \end{InvisibleVerbatim}
+            
+        
+    
+\section{Naive Bayes Document
+Classifier}\label{naive-bayes-document-classifier}
+
+\subsection{Machine Learning Project 2
+Report}\label{machine-learning-project-2-report}
+
+\emph{Aaron Gonzales}
+
+\emph{2015-03-18}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Note 1: This report was prepared using IPython Notebook. You will see
+  code weaved in with the report and see output.
+\item
+  Note 2: I used the full twenty newsgroups dataset and not the
+  pre-vectorized version in Matlab sparse format that we were given. The
+  dataset comes with scikit-learn and is imported from there and is
+  identical in content to the version processed by the set's maintainer,
+  though I did tokenize it slightly differently by removing stopwords
+  (they are not removed in the first set). Some code was used as
+  examples from the Scikit community, though all of the classifer was
+  implemented by me.
+\end{itemize}\subsection{Question 1: Conditional
+Independence}\label{question-1-conditional-independence}
+
+The model described does not assume conditional independence and would
+require \(O(2^n)\) estimations to be done, which is clearly out of the
+question for a doument set.\subsection{Question 2, 3: Testing Accuracy and Prediction
+Issues}\label{question-2-3-testing-accuracy-and-prediction-issues}
+
+When doing any sort of classification task, it is crucial to evaluate
+your performance as clearly as you can. To do this, we can run the
+helper functions that give us this output after fitting the classifer.
+
+This section will also explain how the flow of the program works.
+
+\texttt{bayes.get\_newsgroups()} is a function that loads the newsgroups
+dataset from scikit's built-in system. The returned objects hold the raw
+data, and the data's class labels. The first document is printed below:
+
+    % Make sure that atleast 4 lines are below the HR
+    \needspace{4\baselineskip}
+
+    
+        \vspace{6pt}
+        \makebox[0.1\linewidth]{\smaller\hfill\tt\color{nbframe-in-prompt}In\hspace{4pt}{[}2{]}:\hspace{4pt}}\\*
+        \vspace{-2.65\baselineskip}
+        \begin{ColorVerbatim}
+            \vspace{-0.7\baselineskip}
+            \begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{twenty\PYZus{}train}\PY{p}{,} \PY{n}{twenty\PYZus{}test} \PY{o}{=} \PY{n}{bayes}\PY{o}{.}\PY{n}{get\PYZus{}newsgroups}\PY{p}{(}\PY{p}{)}
+\PY{k}{print}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+\PY{k}{print}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{Document 1 class: }\PY{l+s}{\PYZsq{}} \PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{twenty\PYZus{}train}\PY{o}{.}\PY{n}{target\PYZus{}names}\PY{p}{[}\PY{n}{twenty\PYZus{}train}\PY{o}{.}\PY{n}{target}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\PY{k}{print}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+\PY{k}{print}\PY{p}{(}\PY{n}{twenty\PYZus{}train}\PY{o}{.}\PY{n}{data}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+            
+                \vspace{-0.2\baselineskip}
+            
+        \end{ColorVerbatim}
+    
+
+    
+
+        % If the first block is an image, minipage the image.  Else
+        % request a certain amount of space for the input text.
+        \needspace{4\baselineskip}
+        
+        
+
+            % Add document contents.
+            
+                \begin{InvisibleVerbatim}
+                \vspace{-0.5\baselineskip}
+\begin{alltt}loading training set
+loading testing set
+-----------
+Document 1 class: rec.sport.baseball
+-----------
+From: cubbie@garnet.berkeley.edu (                               )
+Subject: Re: Cubs behind Marlins? How?
+Article-I.D.: agate.1pt592\$f9a
+Organization: University of California, Berkeley
+Lines: 12
+NNTP-Posting-Host: garnet.berkeley.edu
+
+
+gajarsky@pilot.njin.net writes:
+
+morgan and guzman will have era's 1 run higher than last year, and
+ the cubs will be idiots and not pitch harkey as much as hibbard.
+ castillo won't be good (i think he's a stud pitcher)
+
+       This season so far, Morgan and Guzman helped to lead the Cubs
+       at top in ERA, even better than THE rotation at Atlanta.
+       Cubs ERA at 0.056 while Braves at 0.059. We know it is early
+       in the season, we Cubs fans have learned how to enjoy the
+       short triumph while it is still there.
+
+\end{alltt}
+
+            \end{InvisibleVerbatim}
+            
+        
+    
+I then vectorize the data into both a bag-of-words model and a TFIDF
+model using scikits CountVectorizer() and TFiDFVectorizer().
+
+    % Make sure that atleast 4 lines are below the HR
+    \needspace{4\baselineskip}
+
+    
+        \vspace{6pt}
+        \makebox[0.1\linewidth]{\smaller\hfill\tt\color{nbframe-in-prompt}In\hspace{4pt}{[}3{]}:\hspace{4pt}}\\*
+        \vspace{-2.65\baselineskip}
+        \begin{ColorVerbatim}
+            \vspace{-0.7\baselineskip}
+            \begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{train\PYZus{}bow}\PY{p}{,} \PY{n}{test\PYZus{}bow}\PY{p}{,} \PY{n}{cv\PYZus{}bow} \PY{o}{=} \PY{n}{bayes}\PY{o}{.}\PY{n}{vectorize}\PY{p}{(}\PY{n}{twenty\PYZus{}train}\PY{o}{.}\PY{n}{data}\PY{p}{,} \PY{n}{twenty\PYZus{}test}\PY{o}{.}\PY{n}{data}\PY{p}{,} \PY{n}{model}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{bow}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+\PY{n}{train\PYZus{}tfidf}\PY{p}{,} \PY{n}{test\PYZus{}tfidf}\PY{p}{,} \PY{n}{cv\PYZus{}tfidf} \PY{o}{=} \PY{n}{bayes}\PY{o}{.}\PY{n}{vectorize}\PY{p}{(}\PY{n}{twenty\PYZus{}train}\PY{o}{.}\PY{n}{data}\PY{p}{,} \PY{n}{twenty\PYZus{}test}\PY{o}{.}\PY{n}{data}\PY{p}{,} \PY{n}{model}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{tfidf}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+            
+                \vspace{-0.2\baselineskip}
+            
+        \end{ColorVerbatim}
+    
+
+    
+
+        % If the first block is an image, minipage the image.  Else
+        % request a certain amount of space for the input text.
+        \needspace{4\baselineskip}
+        
+        
+
+            % Add document contents.
+            
+                \begin{InvisibleVerbatim}
+                \vspace{-0.5\baselineskip}
+\begin{alltt}fitting training bow vector model
+fitting test bow vector model
+fitting training tfidf vector model
+fitting test tfidf vector model
+\end{alltt}
+
+            \end{InvisibleVerbatim}
+            
+        
+    
+We then estimate the prior classes via MLE, the features give classes
+via MAP (with dirchlet prior, though I will compare it with Laplacian
+smoothing), and then predict values.
+
+Each of these operations is highly vectorized using the Numpy package,
+so where possible explict python for loops are avoided and operations
+are cast as vector or matrix mutiplications or elementwise operations.
+Each numpy array is structred to make it easy to perform these
+operations and they are blazingly fast.
+
+    % Make sure that atleast 4 lines are below the HR
+    \needspace{4\baselineskip}
+
+    
+        \vspace{6pt}
+        \makebox[0.1\linewidth]{\smaller\hfill\tt\color{nbframe-in-prompt}In\hspace{4pt}{[}4{]}:\hspace{4pt}}\\*
+        \vspace{-2.65\baselineskip}
+        \begin{ColorVerbatim}
+            \vspace{-0.7\baselineskip}
+            \begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{class\PYZus{}priors} \PY{o}{=} \PY{n}{bayes}\PY{o}{.}\PY{n}{phat\PYZus{}class\PYZus{}est}\PY{p}{(}\PY{n}{twenty\PYZus{}train}\PY{o}{.}\PY{n}{target}\PY{p}{,} 
+                                    \PY{n}{twenty\PYZus{}train}\PY{o}{.}\PY{n}{target\PYZus{}names}\PY{p}{,} 
+                                    \PY{n}{debug}\PY{o}{=}\PY{n+nb+bp}{False}\PY{p}{)}
+
+\PY{n}{phat\PYZus{}words} \PY{o}{=} \PY{n}{bayes}\PY{o}{.}\PY{n}{phat\PYZus{}word\PYZus{}est}\PY{p}{(}\PY{n}{train\PYZus{}bow}\PY{p}{,}
+                                 \PY{n}{labels}\PY{o}{=}\PY{n}{twenty\PYZus{}train}\PY{o}{.}\PY{n}{target}
+                                 \PY{c}{\PYZsh{}alpha=1}
+                                 \PY{p}{)}
+
+\PY{n}{predicted} \PY{o}{=} \PY{n}{bayes}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{test\PYZus{}data}\PY{o}{=}\PY{n}{test\PYZus{}bow}\PY{p}{,}
+              \PY{n}{test\PYZus{}labels}\PY{o}{=}\PY{n}{twenty\PYZus{}test}\PY{o}{.}\PY{n}{target}\PY{p}{,}
+              \PY{n}{p\PYZus{}classes}\PY{o}{=}\PY{n}{class\PYZus{}priors}\PY{p}{,}
+              \PY{n}{p\PYZus{}features}\PY{o}{=}\PY{n}{phat\PYZus{}words}
+              \PY{p}{)}
+\end{Verbatim}
+
+            
+                \vspace{-0.2\baselineskip}
+            
+        \end{ColorVerbatim}
+    
+
+    
+
+        % If the first block is an image, minipage the image.  Else
+        % request a certain amount of space for the input text.
+        \needspace{4\baselineskip}
+        
+        
+
+            % Add document contents.
+            
+                \begin{InvisibleVerbatim}
+                \vspace{-0.5\baselineskip}
+\begin{alltt}estimating params with Dirchlet Prior:
+         vocabsize = 11314.000000
+         beta = 0.000088
+         alpha = 1.000088
+         denominator = 1.000000
+\end{alltt}
+
+            \end{InvisibleVerbatim}
+            
+        
+    
+Now for the report:
+
+    % Make sure that atleast 4 lines are below the HR
+    \needspace{4\baselineskip}
+
+    
+        \vspace{6pt}
+        \makebox[0.1\linewidth]{\smaller\hfill\tt\color{nbframe-in-prompt}In\hspace{4pt}{[}5{]}:\hspace{4pt}}\\*
+        \vspace{-2.65\baselineskip}
+        \begin{ColorVerbatim}
+            \vspace{-0.7\baselineskip}
+            \begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{np}\PY{o}{.}\PY{n}{set\PYZus{}printoptions}\PY{p}{(}\PY{n}{precision}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{)}
+\PY{n}{rep} \PY{o}{=} \PY{n}{utils}\PY{o}{.}\PY{n}{report}\PY{p}{(}\PY{n}{predicted}\PY{p}{,} \PY{n}{twenty\PYZus{}test}\PY{o}{.}\PY{n}{target\PYZus{}names}\PY{p}{,} \PY{n}{print\PYZus{}report}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{,} \PY{n}{print\PYZus{}cm}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{)}
+\end{Verbatim}
+
+            
+                \vspace{-0.2\baselineskip}
+            
+        \end{ColorVerbatim}
+    
+
+    
+
+        % If the first block is an image, minipage the image.  Else
+        % request a certain amount of space for the input text.
+        \needspace{4\baselineskip}
+        
+        
+
+            % Add document contents.
+            
+                \begin{InvisibleVerbatim}
+                \vspace{-0.5\baselineskip}
+\begin{alltt}                          precision    recall  f1-score   support
+
+             alt.atheism       0.84      0.78      0.81       319
+           comp.graphics       0.64      0.66      0.65       389
+ comp.os.ms-windows.misc       0.67      0.47      0.55       394
+comp.sys.ibm.pc.hardware       0.62      0.65      0.64       392
+   comp.sys.mac.hardware       0.84      0.64      0.72       385
+          comp.windows.x       0.72      0.79      0.75       395
+            misc.forsale       0.86      0.60      0.71       390
+               rec.autos       0.87      0.83      0.85       396
+         rec.motorcycles       0.93      0.92      0.92       398
+      rec.sport.baseball       0.98      0.83      0.90       397
+        rec.sport.hockey       0.89      0.97      0.93       399
+               sci.crypt       0.65      0.94      0.77       396
+         sci.electronics       0.74      0.57      0.64       393
+                 sci.med       0.77      0.82      0.79       396
+               sci.space       0.70      0.89      0.78       394
+  soc.religion.christian       0.80      0.94      0.86       398
+      talk.politics.guns       0.71      0.89      0.79       364
+   talk.politics.mideast       0.85      0.96      0.90       376
+      talk.politics.misc       0.65      0.65      0.65       310
+      talk.religion.misc       0.85      0.45      0.59       251
+
+             avg / total       0.78      0.77      0.76      7532
+
+\end{alltt}
+
+            \end{InvisibleVerbatim}
+            
+                \begin{InvisibleVerbatim}
+                \vspace{-0.5\baselineskip}
+    \begin{center}
+    \includegraphics[max size={\textwidth}{\textheight}]{Naive_Bayes_files/Naive_Bayes_10_1.png}
+    \par
+    \end{center}
+    
+            \end{InvisibleVerbatim}
+            
+        
+    
+The classifier does well, hitting 77\% accuracy. It has a hard time with
+two clusters of documents, the comp.* and the religious/political
+groups. These groups have a great deal of overlap in subjects so this is
+not too surprising.\subsection{Question 4: Priors and
+Overfitting}\label{question-4-priors-and-overfitting}
+
+The following blocks of code create our testing setup and fit the model
+with many \(\beta\) values.
+
+    % Make sure that atleast 4 lines are below the HR
+    \needspace{4\baselineskip}
+
+    
+        \vspace{6pt}
+        \makebox[0.1\linewidth]{\smaller\hfill\tt\color{nbframe-in-prompt}In\hspace{4pt}{[}5{]}:\hspace{4pt}}\\*
+        \vspace{-2.65\baselineskip}
+        \begin{ColorVerbatim}
+            \vspace{-0.7\baselineskip}
+            \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+            
+                \vspace{0.3\baselineskip}
+            
+        \end{ColorVerbatim}
+    
+
+
+    % Make sure that atleast 4 lines are below the HR
+    \needspace{4\baselineskip}
+
+    
+        \vspace{6pt}
+        \makebox[0.1\linewidth]{\smaller\hfill\tt\color{nbframe-in-prompt}In\hspace{4pt}{[}6{]}:\hspace{4pt}}\\*
+        \vspace{-2.65\baselineskip}
+        \begin{ColorVerbatim}
+            \vspace{-0.7\baselineskip}
+            \begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{overfit\PYZus{}trials} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{1}\PY{o}{/}\PY{l+m+mi}{10}\PY{o}{*}\PY{o}{*}\PY{n}{x} \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n+nb}{reversed}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{)}\PY{p}{]}
+\PY{k}{print}\PY{p}{(}\PY{n}{overfit\PYZus{}trials}\PY{p}{)}
+\end{Verbatim}
+
+            
+                \vspace{-0.2\baselineskip}
+            
+        \end{ColorVerbatim}
+    
+
+    
+
+        % If the first block is an image, minipage the image.  Else
+        % request a certain amount of space for the input text.
+        \needspace{4\baselineskip}
+        
+        
+
+            % Add document contents.
+            
+                \begin{InvisibleVerbatim}
+                \vspace{-0.5\baselineskip}
+\begin{alltt}[1e-09, 1e-08, 1e-07, 1e-06, 1e-05, 0.0001, 0.001, 0.01, 0.1, 1.0]
+\end{alltt}
+
+            \end{InvisibleVerbatim}
+            
+        
+    
+
+
+    % Make sure that atleast 4 lines are below the HR
+    \needspace{4\baselineskip}
+
+    
+        \vspace{6pt}
+        \makebox[0.1\linewidth]{\smaller\hfill\tt\color{nbframe-in-prompt}In\hspace{4pt}{[}7{]}:\hspace{4pt}}\\*
+        \vspace{-2.65\baselineskip}
+        \begin{ColorVerbatim}
+            \vspace{-0.7\baselineskip}
+            \begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{capture}
+\PY{c}{\PYZsh{} capture magic command prevents printing by capturing stout}
+\PY{n}{overfit\PYZus{}results} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{k}{for} \PY{n}{beta} \PY{o+ow}{in} \PY{n}{overfit\PYZus{}trials}\PY{p}{:}
+    \PY{n}{phat\PYZus{}c}\PY{p}{,}\PY{n}{phat\PYZus{}w}\PY{p}{,} \PY{n}{pred}\PY{p}{,} \PY{n}{rep} \PY{o}{=} \PY{n}{bayes}\PY{o}{.}\PY{n}{run\PYZus{}model}\PY{p}{(}\PY{n}{twenty\PYZus{}train}\PY{p}{,} \PY{n}{twenty\PYZus{}test}\PY{p}{,}
+                \PY{n}{beta}\PY{o}{=}\PY{n}{beta}\PY{p}{,}
+                \PY{n}{bow}\PY{o}{=}\PY{p}{(}\PY{n}{train\PYZus{}bow}\PY{p}{,} \PY{n}{test\PYZus{}bow}\PY{p}{)}\PY{p}{,}
+                \PY{n}{report}\PY{o}{=}\PY{n+nb+bp}{False}\PY{p}{)}
+    \PY{n}{overfit\PYZus{}results}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{rep}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+            
+                \vspace{-0.2\baselineskip}
+            
+        \end{ColorVerbatim}
+    
+
+
+    % Make sure that atleast 4 lines are below the HR
+    \needspace{4\baselineskip}
+
+    
+        \vspace{6pt}
+        \makebox[0.1\linewidth]{\smaller\hfill\tt\color{nbframe-in-prompt}In\hspace{4pt}{[}8{]}:\hspace{4pt}}\\*
+        \vspace{-2.65\baselineskip}
+        \begin{ColorVerbatim}
+            \vspace{-0.7\baselineskip}
+            \begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fit\PYZus{}results} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{(}\PY{n}{overfit\PYZus{}trials}\PY{p}{,} \PY{n}{overfit\PYZus{}results}\PY{p}{)}\PY{p}{)}
+\PY{n}{pyplot}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{fit\PYZus{}results}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{fit\PYZus{}results}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\PY{c}{\PYZsh{} ax = fig.add\PYZus{}subplot(111)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xscale}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{log}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{Effect of Beta choice on classifier accuracy}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{classification accuracy}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{beta}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+            
+                \vspace{-0.2\baselineskip}
+            
+        \end{ColorVerbatim}
+    
+
+    
+
+        % If the first block is an image, minipage the image.  Else
+        % request a certain amount of space for the input text.
+        \needspace{4\baselineskip}
+        
+        
+
+            % Add document contents.
+            
+                \begin{InvisibleVerbatim}
+                \vspace{-0.5\baselineskip}
+    \begin{center}
+    \includegraphics[max size={\textwidth}{\textheight}]{Naive_Bayes_files/Naive_Bayes_16_0.png}
+    \par
+    \end{center}
+    
+            \end{InvisibleVerbatim}
+            
+        
+    
+As you can see, the choice of beta slightly changes the classification
+score, with \(\beta = 0.1\) giving us our highest accuracy.
+
+\[P(X_i|Y_k) = \frac{(count\ of\ X_i\ in\ Y_k)+(\alpha -1)}{(total\ words\ in Y_k)+((\alpha - 1)*(length\ of\ vocab\ list)))}\]
+
+Where \[\alpha = 1 + \beta\]
+
+tells us that \(\beta\) weights the amount of influence the size of the
+vocabulary has over the estimated posterior probability.\subsection{Question 5,6: Important
+Features}\label{question-56-important-features}
+
+If we multiply the estimated word priors and the class priors, we can
+see words that were important in our dataset. This is a sort-of indirect
+estimate of \(P(C|W) = {P(W|C) * P(C)}\) This can allow us to pull the
+top words per class or the top words overall by looking at words per
+class.
+
+    % Make sure that atleast 4 lines are below the HR
+    \needspace{4\baselineskip}
+
+    
+        \vspace{6pt}
+        \makebox[0.1\linewidth]{\smaller\hfill\tt\color{nbframe-in-prompt}In\hspace{4pt}{[}8{]}:\hspace{4pt}}\\*
+        \vspace{-2.65\baselineskip}
+        \begin{ColorVerbatim}
+            \vspace{-0.7\baselineskip}
+            \begin{Verbatim}[commandchars=\\\{\}]
+\PY{c}{\PYZsh{} numpy will broadcast the smaller array along the larger array}
+\PY{c}{\PYZsh{} and we transpose it to get it back}
+\PY{c}{\PYZsh{} see http://wiki.scipy.org/EricsBroadcastingDoc}
+\PY{n}{log\PYZus{}posteriors} \PY{o}{=}  \PY{n}{np}\PY{o}{.}\PY{n}{transpose}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{log2}\PY{p}{(}\PY{n}{phat\PYZus{}c}\PY{p}{)} \PY{o}{+} \PY{n}{np}\PY{o}{.}\PY{n}{log2}\PY{p}{(}\PY{n}{phat\PYZus{}w}\PY{o}{.}\PY{n}{T}\PY{p}{)}\PY{p}{)}
+\PY{n}{best\PYZus{}words} \PY{o}{=} \PY{n}{utils}\PY{o}{.}\PY{n}{top\PYZus{}words}\PY{p}{(}\PY{n}{cv\PYZus{}bow}\PY{p}{,} \PY{n}{log\PYZus{}posteriors}\PY{p}{,}
+                \PY{n}{twenty\PYZus{}test}\PY{o}{.}\PY{n}{target\PYZus{}names}\PY{p}{,}
+                \PY{n}{n}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{per\PYZus{}class}\PY{o}{=}\PY{n+nb+bp}{False}\PY{p}{,} \PY{n}{order}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{high}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+\PY{n}{worst\PYZus{}words} \PY{o}{=} \PY{n}{utils}\PY{o}{.}\PY{n}{top\PYZus{}words}\PY{p}{(}\PY{n}{cv\PYZus{}bow}\PY{p}{,} \PY{n}{log\PYZus{}posteriors}\PY{p}{,}
+                \PY{n}{twenty\PYZus{}test}\PY{o}{.}\PY{n}{target\PYZus{}names}\PY{p}{,}
+                \PY{n}{n}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{per\PYZus{}class}\PY{o}{=}\PY{n+nb+bp}{False}\PY{p}{,} \PY{n}{order}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{low}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+\PY{n}{best} \PY{o}{=} \PY{p}{[}\PY{n}{utils}\PY{o}{.}\PY{n}{get\PYZus{}word\PYZus{}count}\PY{p}{(}\PY{n}{cv\PYZus{}bow}\PY{p}{,} \PY{n}{train\PYZus{}bow}\PY{p}{,} \PY{n}{word}\PY{p}{)} 
+                        \PY{k}{for} \PY{n}{word} \PY{o+ow}{in} \PY{n}{best\PYZus{}words}\PY{p}{]}
+\PY{n}{worst} \PY{o}{=} \PY{p}{[}\PY{n}{utils}\PY{o}{.}\PY{n}{get\PYZus{}word\PYZus{}count}\PY{p}{(}\PY{n}{cv\PYZus{}bow}\PY{p}{,} \PY{n}{train\PYZus{}bow}\PY{p}{,} \PY{n}{word}\PY{p}{)} 
+                         \PY{k}{for} \PY{n}{word} \PY{o+ow}{in} \PY{n}{worst\PYZus{}words}\PY{p}{]}
+\end{Verbatim}
+
+            
+                \vspace{-0.2\baselineskip}
+            
+        \end{ColorVerbatim}
+    
+
+
+    % Make sure that atleast 4 lines are below the HR
+    \needspace{4\baselineskip}
+
+    
+        \vspace{6pt}
+        \makebox[0.1\linewidth]{\smaller\hfill\tt\color{nbframe-in-prompt}In\hspace{4pt}{[}69{]}:\hspace{4pt}}\\*
+        \vspace{-2.65\baselineskip}
+        \begin{ColorVerbatim}
+            \vspace{-0.7\baselineskip}
+            \begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{print}\PY{p}{(}\PY{n}{best}\PY{p}{)}
+\end{Verbatim}
+
+            
+                \vspace{-0.2\baselineskip}
+            
+        \end{ColorVerbatim}
+    
+
+    
+
+        % If the first block is an image, minipage the image.  Else
+        % request a certain amount of space for the input text.
+        \needspace{4\baselineskip}
+        
+        
+
+            % Add document contents.
+            
+                \begin{InvisibleVerbatim}
+                \vspace{-0.5\baselineskip}
+\begin{alltt}[('controller', 439), ('launch', 361), ('baseball', 454), ('pitt',
+567), ('games', 819), ('mr', 1215), ('turkey', 373), ('55', 551),
+('information', 1983), ('faith', 582), ('think', 4578), ('25', 1435),
+('president', 860), ('2tm', 354), ('card', 1164), ('entry', 456),
+('wm', 396), ('escrow', 360), ('bible', 777), ('ide', 410),
+('armenia', 387), ('cars', 473), ('christian', 938), ('10', 2462),
+('christ', 567), ('believe', 2026), ('public', 1426), ('season', 624),
+('cx', 443), ('widget', 409), ('program', 1689), ('use', 4183),
+('christians', 680), ('mit', 999), ('nhl', 419), ('guns', 563),
+('year', 2055), ('privacy', 450), ('giz', 433), ('church', 638),
+('apple', 857), ('security', 663), ('keys', 611), ('server', 758),
+('motif', 499), ('play', 879), ('dod', 543), ('bhj', 473), ('said',
+2453), ('mac', 919), ('government', 1814), ('2di', 503), ('com',
+12133), ('image', 805), ('3t', 521), ('1t', 528), ('75u', 529),
+('file', 2005), ('ca', 3544), ('db', 649), ('sale', 758), ('bike',
+569), ('edu', 21321), ('jews', 866), ('game', 1194), ('graphics',
+945), ('0t', 586), ('00', 1534), ('armenians', 624), ('jesus', 1239),
+('34u', 639), ('israeli', 685), ('drive', 1626), ('people', 5975),
+('hockey', 660), ('0d', 684), ('armenian', 717), ('team', 1171),
+('1d9', 705), ('turkish', 748), ('nasa', 1335), ('chip', 1119),
+('scsi', 978), ('clipper', 793), ('window', 1126), ('pl', 856),
+('car', 1311), ('encryption', 860), ('israel', 1014), ('gun', 1179),
+('145', 996), ('a86', 1040), ('windows', 1953), ('b8f', 1156), ('g9v',
+1203), ('key', 1674), ('god', 2994), ('space', 1856), ('max', 4690),
+('ax', 62406)]
+\end{alltt}
+
+            \end{InvisibleVerbatim}
+            
+        
+    
+Notice how the words that come out all have moderate counts and tent to
+be loaded - car, file, mac, government, jesus - likely high information
+words. Contrast those with the lowest info words in the set:
+
+    % Make sure that atleast 4 lines are below the HR
+    \needspace{4\baselineskip}
+
+    
+        \vspace{6pt}
+        \makebox[0.1\linewidth]{\smaller\hfill\tt\color{nbframe-in-prompt}In\hspace{4pt}{[}70{]}:\hspace{4pt}}\\*
+        \vspace{-2.65\baselineskip}
+        \begin{ColorVerbatim}
+            \vspace{-0.7\baselineskip}
+            \begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{print}\PY{p}{(}\PY{n}{worst}\PY{p}{)}
+\end{Verbatim}
+
+            
+                \vspace{-0.2\baselineskip}
+            
+        \end{ColorVerbatim}
+    
+
+    
+
+        % If the first block is an image, minipage the image.  Else
+        % request a certain amount of space for the input text.
+        \needspace{4\baselineskip}
+        
+        
+
+            % Add document contents.
+            
+                \begin{InvisibleVerbatim}
+                \vspace{-0.5\baselineskip}
+\begin{alltt}[('campaigning', 6), ('softly', 5), ('mobs', 5), ('runaway', 5),
+('733', 7), ('aquired', 5), ('1576', 5), ('reload', 7),
+('distinctive', 6), ('architectural', 5), ('superseded', 5),
+('laurier', 5), ('mach1', 5), ('wilfrid', 5), ('maze', 5),
+('positioned', 7), ('solves', 7), ('adherence', 6), ('retailers', 6),
+('troublesome', 6), ('fiddle', 6), ('supermarket', 6),
+('contaminating', 5), ('1937', 5), ('burner', 5), ('7400', 5),
+('uncover', 5), ('ploy', 5), ('addendum', 5), ('illuminating', 5),
+('originals', 9), ('misinformed', 6), ('fone', 6), ('behaves', 6),
+('subscriptions', 6), ('scrabble', 5), ('norms', 5), ('94086', 5),
+('conceptual', 5), ('disregarding', 5), ('discrepancies', 5),
+('unpublished', 5), ('vers', 5), ('archaic', 5), ('pioneers', 5),
+('centrally', 5), ('primer', 5), ('consoles', 5), ('forefront', 5),
+('prom', 5), ('glanced', 6), ('verge', 6), ('mater', 6),
+('criminally', 5), ('boosting', 5), ('becasue', 5), ('hodges', 5),
+('589', 5), ('\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_', 7), ('gratification', 7), ('sirius', 7),
+('messing', 7), ('glued', 6), ('whims', 6), ('consolation', 6),
+('nuff', 6), ('thirdly', 5), ('723', 5), ('stature', 5), ('roaring',
+5), ('binder', 5), ('segundo', 5), ('strayed', 5), ('structurally',
+5), ('tcs', 5), ('acoustic', 5), ('utmost', 9), ('fruitless', 9),
+('mate', 9), ('comming', 7), ('generalized', 7), ('visions', 7),
+('waits', 7), ('spurious', 7), ('exhibiting', 6), ('extremists', 6),
+('stirred', 6), ('equivalence', 6), ('speculating', 6), ('restricts',
+6), ('occupies', 6), ('exert', 6), ('397', 6), ('satisfying', 6),
+('communicated', 6), ('misread', 5), ('entrusted', 5), ('ecstatic',
+5), ('excellently', 5), ('debunk', 5)]
+\end{alltt}
+
+            \end{InvisibleVerbatim}
+            
+        
+    
+That have very, very low counts in the data, are often mispelled.
+
+\subsection{Question 7: Bias}\label{question-7-bias}
+
+It seems as though the words may have been slightly biased toward
+religious and political words. If new data doesn't talk much about those
+things, we might not accurately classify that data.
+
+\subsection{Laplace, TFIDF}\label{laplace-tfidf}
+
+I also wanted to report accuracies for Laplacian smoothing and then
+TFIDF models.
+
+    % Make sure that atleast 4 lines are below the HR
+    \needspace{4\baselineskip}
+
+    
+        \vspace{6pt}
+        \makebox[0.1\linewidth]{\smaller\hfill\tt\color{nbframe-in-prompt}In\hspace{4pt}{[}79{]}:\hspace{4pt}}\\*
+        \vspace{-2.65\baselineskip}
+        \begin{ColorVerbatim}
+            \vspace{-0.7\baselineskip}
+            \begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{phat\PYZus{}c}\PY{p}{,}\PY{n}{phat\PYZus{}w}\PY{p}{,} \PY{n}{pred}\PY{p}{,} \PY{n}{rep} \PY{o}{=} \PY{n}{bayes}\PY{o}{.}\PY{n}{run\PYZus{}model}\PY{p}{(}\PY{n}{twenty\PYZus{}train}\PY{p}{,} \PY{n}{twenty\PYZus{}test}\PY{p}{,}
+                \PY{n}{laplacian}\PY{o}{=}\PY{p}{(}\PY{n+nb+bp}{True}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}
+                \PY{n}{bow}\PY{o}{=}\PY{p}{(}\PY{n}{train\PYZus{}bow}\PY{p}{,} \PY{n}{test\PYZus{}bow}\PY{p}{)}\PY{p}{,}
+                \PY{n}{report}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{)}
+\end{Verbatim}
+
+            
+                \vspace{-0.2\baselineskip}
+            
+        \end{ColorVerbatim}
+    
+
+    
+
+        % If the first block is an image, minipage the image.  Else
+        % request a certain amount of space for the input text.
+        \needspace{4\baselineskip}
+        
+        
+
+            % Add document contents.
+            
+                \begin{InvisibleVerbatim}
+                \vspace{-0.5\baselineskip}
+\begin{alltt}estimating class priors
+estimating word priors
+estimating params with Laplacian Smoothing:
+         alpha = 1
+         denominator = 20
+predicting
+                          precision    recall  f1-score   support
+
+             alt.atheism       0.81      0.70      0.75       319
+           comp.graphics       0.76      0.68      0.71       389
+ comp.os.ms-windows.misc       0.77      0.49      0.60       394
+comp.sys.ibm.pc.hardware       0.67      0.68      0.68       392
+   comp.sys.mac.hardware       0.89      0.64      0.74       385
+          comp.windows.x       0.64      0.87      0.74       395
+            misc.forsale       0.95      0.59      0.73       390
+               rec.autos       0.90      0.83      0.86       396
+         rec.motorcycles       0.98      0.89      0.93       398
+      rec.sport.baseball       0.98      0.83      0.90       397
+        rec.sport.hockey       0.86      0.98      0.91       399
+               sci.crypt       0.56      0.97      0.71       396
+         sci.electronics       0.81      0.50      0.62       393
+                 sci.med       0.84      0.80      0.82       396
+               sci.space       0.72      0.93      0.81       394
+  soc.religion.christian       0.75      0.95      0.84       398
+      talk.politics.guns       0.66      0.91      0.77       364
+   talk.politics.mideast       0.72      0.97      0.83       376
+      talk.politics.misc       0.65      0.60      0.63       310
+      talk.religion.misc       0.92      0.26      0.41       251
+
+             avg / total       0.79      0.77      0.76      7532
+
+\end{alltt}
+
+            \end{InvisibleVerbatim}
+            
+                \begin{InvisibleVerbatim}
+                \vspace{-0.5\baselineskip}
+    \begin{center}
+    \includegraphics[max size={\textwidth}{\textheight}]{Naive_Bayes_files/Naive_Bayes_24_1.png}
+    \par
+    \end{center}
+    
+            \end{InvisibleVerbatim}
+            
+        
+    
+
+
+    % Make sure that atleast 4 lines are below the HR
+    \needspace{4\baselineskip}
+
+    
+        \vspace{6pt}
+        \makebox[0.1\linewidth]{\smaller\hfill\tt\color{nbframe-in-prompt}In\hspace{4pt}{[}83{]}:\hspace{4pt}}\\*
+        \vspace{-2.65\baselineskip}
+        \begin{ColorVerbatim}
+            \vspace{-0.7\baselineskip}
+            \begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{phat\PYZus{}c}\PY{p}{,}\PY{n}{phat\PYZus{}w}\PY{p}{,} \PY{n}{pred}\PY{p}{,} \PY{n}{rep} \PY{o}{=} \PY{n}{bayes}\PY{o}{.}\PY{n}{run\PYZus{}model}\PY{p}{(}\PY{n}{twenty\PYZus{}train}\PY{p}{,} \PY{n}{twenty\PYZus{}test}\PY{p}{,}
+                \PY{n}{beta}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{,}
+                \PY{n}{bow}\PY{o}{=}\PY{p}{(}\PY{n}{train\PYZus{}tfidf}\PY{p}{,} \PY{n}{test\PYZus{}tfidf}\PY{p}{)}\PY{p}{,}
+                \PY{n}{report}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{)}
+\end{Verbatim}
+
+            
+                \vspace{-0.2\baselineskip}
+            
+        \end{ColorVerbatim}
+    
+
+    
+
+        % If the first block is an image, minipage the image.  Else
+        % request a certain amount of space for the input text.
+        \needspace{4\baselineskip}
+        
+        
+
+            % Add document contents.
+            
+                \begin{InvisibleVerbatim}
+                \vspace{-0.5\baselineskip}
+\begin{alltt}estimating class priors
+estimating word priors
+estimating params with Dirchlet Prior:
+         vocabsize = 11314.000000
+         beta = 0.100000
+         alpha = 1.100000
+         denominator = 1131.400000
+predicting
+                          precision    recall  f1-score   support
+
+             alt.atheism       0.83      0.70      0.76       319
+           comp.graphics       0.76      0.74      0.75       389
+ comp.os.ms-windows.misc       0.76      0.68      0.72       394
+comp.sys.ibm.pc.hardware       0.67      0.74      0.70       392
+   comp.sys.mac.hardware       0.88      0.82      0.85       385
+          comp.windows.x       0.86      0.80      0.83       395
+            misc.forsale       0.85      0.78      0.82       390
+               rec.autos       0.88      0.91      0.89       396
+         rec.motorcycles       0.91      0.95      0.93       398
+      rec.sport.baseball       0.95      0.94      0.94       397
+        rec.sport.hockey       0.93      0.98      0.95       399
+               sci.crypt       0.78      0.95      0.86       396
+         sci.electronics       0.78      0.72      0.75       393
+                 sci.med       0.89      0.83      0.86       396
+               sci.space       0.83      0.93      0.88       394
+  soc.religion.christian       0.68      0.96      0.79       398
+      talk.politics.guns       0.68      0.95      0.79       364
+   talk.politics.mideast       0.93      0.96      0.95       376
+      talk.politics.misc       0.92      0.55      0.69       310
+      talk.religion.misc       0.92      0.33      0.48       251
+
+             avg / total       0.83      0.82      0.82      7532
+
+\end{alltt}
+
+            \end{InvisibleVerbatim}
+            
+                \begin{InvisibleVerbatim}
+                \vspace{-0.5\baselineskip}
+    \begin{center}
+    \includegraphics[max size={\textwidth}{\textheight}]{Naive_Bayes_files/Naive_Bayes_25_1.png}
+    \par
+    \end{center}
+    
+            \end{InvisibleVerbatim}
+            
+        
+    
+We improve our overall accuray a bit with the stronger TFIDF model,
+taking the frequency of the words in the document into account and not
+just the counts of the words in a document. This reduces some of the
+bias in a long doument. Laplacian smoothing doesn't seem to change our
+results very much in the original bow model.
+        
+
+        \renewcommand{\indexname}{Index}
+        \printindex
+
+    % End of document
+    \end{document}
+
+
