@@ -57,7 +57,7 @@ def phat_class_est(class_list, class_labels, debug=False):
 
 def phat_word_est(train_data, labels, beta=None,
                   nclasses=20, laplacian=(False, None), debug=None):
-    """Gets P(c|w) for all words in the dictionary.
+    """Gets P(w|d) for all words in the dictionary.
     Args:
         train_data (scipy.sparse): training set, assumes bag of words
         labels(np.array): list of class label names (scikitlearn
@@ -141,7 +141,7 @@ def predict(test_data, test_labels, p_classes, p_features, classes=20,
     pred_labels = np.argmax(pred_log_probs, axis=1)
     acc = pred_labels == test_labels
 
-    # returns (n 3) array
+    # returns (n, 3) array
     return np.array([test_labels, pred_labels, acc]).T
 
 
@@ -174,7 +174,7 @@ def vectorize(train_data, test_data, minfreq=5, maxfreq=0.90, stemmer=False,
     train_ = cv_train.fit_transform(train_data)
     print('fitting test ' + model + ' vector model')
     test_ = cv_train.transform(test_data)
-    return(train_, test_)
+    return(train_, test_, cv_train)
 
 
 def run_model(train_data, test_data, beta=None, bow=False, report=True):
