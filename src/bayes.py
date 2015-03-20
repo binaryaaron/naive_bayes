@@ -19,8 +19,6 @@ __copyright__ = "MIT"
 __license__ = "MIT"
 __email__ = "agonzales@cs.unm.edu"
 
-train_bow = 0
-test_bow = 0
 
 class LemmaTokenizer(object):
     """
@@ -151,6 +149,10 @@ def vectorize(train_data, test_data, minfreq=5, maxfreq=0.90, stemmer=False,
     Args:
         train_data (list): list of documents in the training set
         test_data (list): list of documents in the test set
+        minfreq: int or fraction of minimum documents that contain a word
+        maxfreq: words that appear in more than this number are not used
+        stemmer: specify a stemmer for the model e.g., LemmaTokenizer
+        model: bag of word or tfidf.
     Return:
         tuple of two fitted bag-of-words models.
     """
@@ -182,6 +184,9 @@ def run_model(train_data, test_data, beta=None, bow=False, report=True):
     Args:
         train_data(sklearn.datasets.base.Bunch): the training data from scikit
         test_data(sklearn.datasets.base.Bunch): the testing data from scikit
+        beta: the value you want to use for beta
+        bow: tuple with the bag of word models if you already have them
+        report: flag for reporting
     Returns:
         tuple with all estimated things - (class_priors, estimated_words,
         predicted values, reportstring)
@@ -190,11 +195,23 @@ def run_model(train_data, test_data, beta=None, bow=False, report=True):
         return _run_model(train_data, test_data, beta, bow, report=report)
 
     print("fitting count vectorizers")
-    bow = (train_bow, test_bow) = vectorize(train_data.data, test_data.data)
+    _bow = (tr_bow, tr_bow, cv) = vectorize(train_data.data, test_data.data)
+    bow = (_bow[0], _bow[1])
     return _run_model(train_data, test_data, beta=beta, bow=bow, report=report)
 
 
 def _run_model(train_data, test_data, beta=None, bow=False, report=True):
+    """helper function for run_model
+    Args:
+        train_data(sklearn.datasets.base.Bunch): the training data from scikit
+        test_data(sklearn.datasets.base.Bunch): the testing data from scikit
+        beta: the value you want to use for beta
+        bow: tuple with the bag of word models if you already have them
+        report: flag for reporting
+    Returns:
+        tuple with all estimated things - (class_priors, estimated_words,
+        predicted values, reportstring)
+    """
 
     if bow is not False:
         train_bow, test_bow = bow
