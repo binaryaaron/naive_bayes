@@ -159,11 +159,17 @@ def calc_gen_accuracy(predicted):
     return(num_right, num_wrong, general_acc)
 
 
-def report(predicted, labels, print_report=False, print_cm=True, print_matrix=True):
+def report(predicted, labels, print_report=False,
+           print_cm=True):
     """Light wrapper around sklearn metrics"""
+
     cr = metrics.classification_report(predicted[:, 0],
-                                       predicted[:, 1], 
+                                       predicted[:, 1],
                                        target_names=labels)
+    acc = metrics.accuracy_score(predicted[:, 0],
+                                 predicted[:, 1]
+                                 )
+    # print(acc)
     if print_report is True:
         print(cr)
 
@@ -181,10 +187,10 @@ def report(predicted, labels, print_report=False, print_cm=True, print_matrix=Tr
                               labels,
                               title='Normalized confusion matrix'
                               )
-
         plt.savefig('nb_confusion_matrix.pdf')
         plt.show()
-    return cr
+
+    return (cr, acc)
 
 
 def plot_confusion_matrix(cm, labels, title='Confusion matrix',
