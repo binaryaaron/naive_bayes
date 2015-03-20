@@ -7,7 +7,7 @@ try:
     import matplotlib.pyplot as plt
     from sklearn import metrics
 except ImportError:
-    raise ImportError("This program requires Numpy and Matplotlib")
+    raise ImportError("This program requires Numpy, sklearn, and Matplotlib")
 
 __author__ = "Aaron Gonzales"
 __copyright__ = "MIT"
@@ -175,12 +175,12 @@ def report(predicted, labels, print_report=False,
 
     if print_cm is True:
         # Compute confusion matrix
-        conf_matrix = metrics.confusion_matrix(predicted[:, 0], predicted[:, 1])
+        cm = metrics.confusion_matrix(predicted[:, 0], predicted[:, 1])
 
         # Normalize the confusion matrix by row (i.e by the number of samples
         # in each class)
-        cm_normalized = conf_matrix.astype('float') / \
-                        conf_matrix.sum(axis=1)[:, np.newaxis]
+        cm_normalized = cm.astype('float') / \
+                        cm.sum(axis=1)[:, np.newaxis]
         # print('Normalized confusion matrix')
         plt.figure()
         plot_confusion_matrix(cm_normalized,
@@ -206,3 +206,40 @@ def plot_confusion_matrix(cm, labels, title='Confusion matrix',
     plt.yticks(tick_marks, labels)
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
+
+
+def top_words(vectorizer, phat_w, class_labels, n=5, per_class=True,
+              order='high'):
+    """Prints features with the highest coefficient values, per class
+    Originally seen on Scikit Learn for the per-class method, but I implemented
+    the overall
+
+    """
+    words = vectorizer.get_feature_names()
+    if per_class is True:
+        for i, class_label in enumerate(class_labels):
+            topwords_view = np.argsort(phat_w[i])[-n:]
+            topwords = [words[j] + ',' for j in topwords_view]
+            print("%s: %s" % (class_label, " ".join(topwords)))
+        return
+    else:
+        # this gets the row vector of max arguments along classes
+        view = np.argmax(phat_w, axis=0)
+        # this slice takes from length-n -> length slice
+        max_words = np.choose(view, phat_w)
+        if order == 'high':
+            maxes = np.argsort(max_words)[-n:]
+        if order == 'low':
+            maxes = np.argsort(max_words)[0:n]
+        topwords = [words[j] for j in maxes]
+        # for i, word in enumerate(topwords):
+        # print("%d: %s" (i, word))
+        print(topwords)
+
+
+def get_word_count(cv, bow, word):
+    """ Gets the count of a word in the bow model.
+    """
+    word_id = cv.vocabulary_[word]
+    s = np.sum(bow[:, word_id].toarray())
+    return (word, s)
